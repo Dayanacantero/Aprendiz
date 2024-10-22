@@ -64,10 +64,12 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.0") // Para previsualización
     implementation("androidx.activity:activity-compose:1.6.1") // Integración con Activity
     implementation("androidx.compose.ui:ui:1.3.0") // Asegúrate de que la versión sea la adecuada
-    implementation("androidx.compose.material3:material3:1.0.0") // Para Material3
+    implementation("androidx.compose.material3:material3:1.0.0")
+    implementation ("androidx.navigation:navigation-compose:2.7.3")// Para Material3
     implementation(libs.androidx.constraintlayout)
     implementation(libs.material)
     implementation(libs.androidx.ui.test.android)
+    implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

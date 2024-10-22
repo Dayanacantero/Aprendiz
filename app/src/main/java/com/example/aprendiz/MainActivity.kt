@@ -4,14 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.aprendiz.screens.Home
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.aprendiz.screens.CalendarioScreen
+import com.example.aprendiz.screens.HomeScreen
 import com.example.aprendiz.ui.theme.AprendizTheme
 
 
@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             // Llama a la función home aquí
-           Home()
+
+            AppNavigation()
         }
     }
 }
