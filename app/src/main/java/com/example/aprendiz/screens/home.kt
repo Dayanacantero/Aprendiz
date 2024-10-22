@@ -1,5 +1,6 @@
 package com.example.aprendiz.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,6 +17,8 @@ import androidx.compose.ui.draw.shadow
 import com.example.aprendiz.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -24,7 +27,7 @@ import androidx.navigation.NavHostController
 fun HomeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize()
-            .padding(60.dp)
+            .padding(top = 30.dp)
     ) {
         // Primer LinearLayout en horizontal
         Row(
@@ -103,9 +106,53 @@ fun HomeScreen(navController: NavHostController) {
                 }
             }
         InstructorContainer()
-        }
+        //bitacora
+        Surface(
+            modifier = Modifier
+                .width(200.dp)
+                .height(200.dp)
+                .padding(vertical = 8.dp)
+                .background(Color(0xFFF7F7F7)),
 
+            // Color de fondo similar a bg-gray-100
+            shadowElevation = 4.dp
+
+
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp), // Padding interno
+                horizontalAlignment = Alignment.CenterHorizontally, // Alinear horizontalmente
+                verticalArrangement = Arrangement.Center // Alinear verticalmente
+            ) {
+                Text(
+                    text = "Bitácoras",
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 8.dp) // Margen inferior
+                )
+
+                // Contenedor para el gráfico (simulación)
+                Box(
+                    modifier = Modifier
+                        .size(240.dp) // Tamaño del gráfico
+                        .background(Color.White), // Color de fondo del contenedor
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.bitacora),
+                        contentDescription = null,
+                        modifier = Modifier.size(90.dp)
+                    )
+                }
+            }
+
+        }
+        TimelineContainer()
+    }
 }
+
+
+
+
 
 
 // Función para el contenedor del instructor
@@ -156,5 +203,82 @@ fun DetailItem(label: String, value: String) {
                 .height(1.dp)
                 .background(Color.White)
         )
+    }
+}
+@Composable
+fun TimelineContainer() {
+    Surface(
+        modifier = Modifier
+            .width(300.dp)
+            .padding(vertical = 8.dp)
+            .background(Color(0xFFF7F7F7)),
+        shadowElevation = 4.dp
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Línea Temporal (Etapa de seguimiento)",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp),
+                textAlign = TextAlign.Center
+            )
+
+            // Contenedor del gráfico de línea temporal
+            Box(
+                modifier = Modifier
+                    .height(300.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.TopStart
+            ) {
+                TimelineChart(events = listOf(
+                    "Asignación - 2023-12-29",
+                    "Inicio Etapa Productiva - 2024-01-01",
+                    "Primera Visita - 2024-02-01",
+                    "Segunda Visita - 2024-04-01",
+                    "Tercera Visita - 2024-06-01",
+                    "Finalización - 2024-08-01"
+                ))
+            }
+        }
+    }
+}
+
+// Composable que dibuja la línea temporal
+@Composable
+fun TimelineChart(events: List<String>) {
+    Column(
+        modifier = Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        events.forEachIndexed { index, event ->
+            TimelineEvent(eventText = event, isCompleted = index < 2) // Marcamos los primeros dos como completados
+        }
+    }
+}
+
+// Componente para representar cada evento de la línea temporal
+@Composable
+fun TimelineEvent(eventText: String, isCompleted: Boolean) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 16.dp)
+    ) {
+        // Dibuja el círculo del evento
+        Canvas(modifier = Modifier.size(16.dp)) {
+            drawCircle(
+                color = if (isCompleted) Color.Green else Color.Gray,
+                radius = size.minDimension / 2
+            )
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        // Texto del evento
+        Text(text = eventText, fontSize = 14.sp)
     }
 }
