@@ -1,14 +1,12 @@
 package com.example.aprendiz.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,15 +17,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,18 +38,16 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.aprendiz.R
-import java.time.YearMonth
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarioScreen(navController: NavHostController) {
+fun RegistroVisitaScreen(navController: NavHostController) {
     var expanded by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize()
@@ -166,8 +163,9 @@ fun CalendarioScreen(navController: NavHostController) {
             }
 
         }
+        }
         // Segundo LinearLayout que aparecerá debajo del primero
-        Surface(
+        androidx.compose.material3.Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(70.dp)
@@ -191,12 +189,11 @@ fun CalendarioScreen(navController: NavHostController) {
                         .clickable {
                             navController.navigate("notificaciones") // Navega a la pantalla de notificaciones
                         },
-                            colorFilter = ColorFilter.tint(Color.White)
+                    colorFilter = ColorFilter.tint(Color.White)
 
 
                 )
             }
-
             // Botones centrados
             Column(
                 modifier = Modifier
@@ -228,116 +225,71 @@ fun CalendarioScreen(navController: NavHostController) {
                     }
                 }
             }
-            }
-            // Nuevo Surface para el calendario
-        Surface(
-
-
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .background(Color.White)
-                .shadow(10.dp),
-            shape = RoundedCornerShape(12.dp),
-            color = Color.White
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                var currentMonth by remember { mutableStateOf(YearMonth.now()) }
-                // Encabezado del cronograma con botones de navegación entre meses
-                Row(
-
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-
-                ) {
-
-                    Row {
-
-                        Button(
-
-                            onClick = {
-
-                                currentMonth = currentMonth.minusMonths(1)
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF009E00))
-                        ) {
-                            Text("<")
-                        }
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale("es"))),
-                            modifier = Modifier
-                                .background(Color(0xFF009E00))
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Button(
-                            onClick = {
-                                currentMonth = currentMonth.plusMonths(1)
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF009E00))
-                        ) {
-                            Text(">")
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Días de la semana
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    listOf("Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb").forEach { day ->
-                        Text(
-                            text = day,
-                            fontSize = 16.sp,
-                            modifier = Modifier.weight(1f),
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Días del mes en forma de calendario usando LazyVerticalGrid
-                val daysInMonth = currentMonth.lengthOfMonth()
-                val firstDayOfMonth = currentMonth.atDay(1).dayOfWeek.value % 7
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(7),
-                    modifier = Modifier.height(300.dp),
-                    contentPadding = PaddingValues(4.dp)
-                ) {
-                    // Agrega espacios vacíos antes del primer día del mes
-                    items(firstDayOfMonth) {
-                        Spacer(modifier = Modifier.size(40.dp))
-                    }
-
-                    // Muestra los días del mes
-                    items(daysInMonth) { day ->
-                        Text(
-                            text = (day + 1).toString(),
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(Color.LightGray)
-                                .clickable {
-                                    // Navegar a la pantalla de RegistroVisita
-                                    navController.navigate("registro_visita")
-                                }
-                                .padding(8.dp),
-                            fontSize = 16.sp,
-                            color = Color.Black
-                        )
-                    }
-                }
-
-            }
         }
+    // Contenedor principal con fondo blanco y bordes redondeados
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+            .border(1.dp, Color(0x88000000), RoundedCornerShape(20.dp))
+            .background(Color(0xFFFFFEFE))
+            .shadow(4.dp, RoundedCornerShape(20.dp)),
+        shape = RoundedCornerShape(20.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) {
+            // Encabezado de la visita
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                color = Color(0xFF009e00),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Text(
+                    text = "Visita N1",
+                    modifier = Modifier.padding(vertical = 16.dp),
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h6,
+                    fontFamily = FontFamily.SansSerif
+                )
+            }
+
+            // Detalles de la visita
+            Text(text = "Fecha: 01/04/2024", fontSize = 14.sp)
+            Text(text = "Hora: 08:30am", fontSize = 14.sp)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Línea divisora
+            Divider(color = Color(0xFF7a7a7a), thickness = 1.dp, modifier = Modifier.fillMaxWidth(0.72f))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Opciones de checkbox
+            CheckboxOption(label = "Realizado")
+            CheckboxOption(label = "No Realizado")
+        }
+    }
+}
+
+@Composable
+fun CheckboxOption(label: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(start = 20.dp, bottom = 8.dp)
+    ) {
+        Checkbox(
+            checked = false,
+            onCheckedChange = {},
+            modifier = Modifier.padding(end = 10.dp)
+        )
+        Text(text = label, fontSize = 14.sp)
     }
 }

@@ -1,14 +1,11 @@
 package com.example.aprendiz.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,14 +16,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,24 +42,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.aprendiz.R
-import java.time.YearMonth
-import java.time.format.DateTimeFormatter
-import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarioScreen(navController: NavHostController) {
+fun ConfiguracionScreen(navController: NavHostController) {
     var expanded by remember { mutableStateOf(false) }
+    // Variables para almacenar el texto de los campos
+    var currentPassword by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var resultMessage by remember { mutableStateOf("") }
     Column(
         modifier = Modifier.fillMaxSize()
             .padding(top = 30.dp)
     ) {
         // Primer LinearLayout en horizontal
-        Row  (
+        Row(
             modifier = Modifier.padding(0.dp),
             verticalAlignment = Alignment.Top
         ) {
@@ -93,13 +98,10 @@ fun CalendarioScreen(navController: NavHostController) {
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
             // Texto "Dayana" con el menú desplegable
-            Box( modifier = Modifier
-                .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
-
-                .wrapContentSize(Alignment.TopEnd),
-                contentAlignment = Alignment.CenterStart
+            Box(
+                modifier = Modifier.wrapContentSize(Alignment.TopEnd)
+                    .align(Alignment.CenterVertically)
 
             ) {
 
@@ -108,9 +110,8 @@ fun CalendarioScreen(navController: NavHostController) {
                     modifier = Modifier
                         .background(Color(0xFFFFFFFF))
                         .shadow(4.dp, RoundedCornerShape(20.dp))
-                        .padding(10 .dp)
+                        .padding(10.dp)
                         .clickable { expanded = true },
-
 
 
                     // Hacemos que el texto sea clickable para mostrar el menú
@@ -127,7 +128,7 @@ fun CalendarioScreen(navController: NavHostController) {
                     Row(modifier = Modifier.padding(bottom = 12.dp)) {
                         Column {
                             Text(
-                                text = "Dayana Cantero",
+                                text = "Nombre Usuario",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp
                             )
@@ -150,7 +151,6 @@ fun CalendarioScreen(navController: NavHostController) {
                     DropdownMenuItem(onClick = {
                         expanded = false
                         // Navegar a la pantalla de configuración u otro lugar
-                        navController.navigate("configuracion")
                     }) {
                         Text("Configuración")
                     }
@@ -164,7 +164,6 @@ fun CalendarioScreen(navController: NavHostController) {
                 }
 
             }
-
         }
         // Segundo LinearLayout que aparecerá debajo del primero
         Surface(
@@ -191,12 +190,11 @@ fun CalendarioScreen(navController: NavHostController) {
                         .clickable {
                             navController.navigate("notificaciones") // Navega a la pantalla de notificaciones
                         },
-                            colorFilter = ColorFilter.tint(Color.White)
+                    colorFilter = ColorFilter.tint(Color.White)
 
 
                 )
             }
-
             // Botones centrados
             Column(
                 modifier = Modifier
@@ -220,123 +218,127 @@ fun CalendarioScreen(navController: NavHostController) {
                     Button(
                         onClick = { navController.navigate("calendario") },
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFF61C449),
-                            contentColor = Color.White
+                            backgroundColor = Color.Transparent
                         )
                     ) {
                         Text(text = "Calendario")
                     }
                 }
             }
-            }
-            // Nuevo Surface para el calendario
-        Surface(
+        }
 
+//CONFIGURACION
 
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(16.dp)
                 .background(Color.White)
-                .shadow(10.dp),
-            shape = RoundedCornerShape(12.dp),
-            color = Color.White
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
+            // Flecha para volver a la pantalla anterior
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.Start
             ) {
-                var currentMonth by remember { mutableStateOf(YearMonth.now()) }
-                // Encabezado del cronograma con botones de navegación entre meses
-                Row(
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Volver",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
 
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+            // Título "Configuración"
+            Text(
+                text = "Configuración",
+                style = MaterialTheme.typography.h4,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                textAlign = TextAlign.Center
+            )
 
+            // Tarjeta de "Cambio de Contraseña"
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = 4.dp,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
                 ) {
+                    Text(
+                        text = "Cambio de Contraseña",
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
 
-                    Row {
+                    // Campo de Contraseña Actual
+                    OutlinedTextField(
+                        value = currentPassword,
+                        onValueChange = { currentPassword = it },
+                        label = { Text("Contraseña Actual") },
+                        modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true
+                    )
 
-                        Button(
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                            onClick = {
+                    // Campo de Nueva Contraseña
+                    OutlinedTextField(
+                        value = newPassword,
+                        onValueChange = { newPassword = it },
+                        label = { Text("Nueva Contraseña") },
+                        modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true
+                    )
 
-                                currentMonth = currentMonth.minusMonths(1)
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF009E00))
-                        ) {
-                            Text("<")
-                        }
-                        Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // Campo de Confirmación de Contraseña
+                    OutlinedTextField(
+                        value = confirmPassword,
+                        onValueChange = { confirmPassword = it },
+                        label = { Text("Confirmar Nueva Contraseña") },
+                        modifier = Modifier.fillMaxWidth(),
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Botón para actualizar la contraseña
+                    Button(
+                        onClick = {
+                            // Verificar si las contraseñas coinciden
+                            if (newPassword == confirmPassword) {
+                                resultMessage = "Actualización exitosa" // Si coinciden
+                            } else {
+                                resultMessage = "Las contraseñas no coinciden" // Si no coinciden
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF009E00))
+                    ) {
+                        Text("Actualizar Contraseña", color = Color.White)
+                    }
+
+                    // Mostrar el mensaje de resultado
+                    if (resultMessage.isNotEmpty()) {
                         Text(
-                            text = currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale("es"))),
-                            modifier = Modifier
-                                .background(Color(0xFF009E00))
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Button(
-                            onClick = {
-                                currentMonth = currentMonth.plusMonths(1)
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF009E00))
-                        ) {
-                            Text(">")
-                        }
+                            text = resultMessage,
+                            color = if (resultMessage == "Actualización exitosa") Color.Green else Color.Red,
+                            modifier = Modifier.padding(top = 16.dp))
                     }
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Días de la semana
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    listOf("Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb").forEach { day ->
-                        Text(
-                            text = day,
-                            fontSize = 16.sp,
-                            modifier = Modifier.weight(1f),
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Días del mes en forma de calendario usando LazyVerticalGrid
-                val daysInMonth = currentMonth.lengthOfMonth()
-                val firstDayOfMonth = currentMonth.atDay(1).dayOfWeek.value % 7
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(7),
-                    modifier = Modifier.height(300.dp),
-                    contentPadding = PaddingValues(4.dp)
-                ) {
-                    // Agrega espacios vacíos antes del primer día del mes
-                    items(firstDayOfMonth) {
-                        Spacer(modifier = Modifier.size(40.dp))
-                    }
-
-                    // Muestra los días del mes
-                    items(daysInMonth) { day ->
-                        Text(
-                            text = (day + 1).toString(),
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(Color.LightGray)
-                                .clickable {
-                                    // Navegar a la pantalla de RegistroVisita
-                                    navController.navigate("registro_visita")
-                                }
-                                .padding(8.dp),
-                            fontSize = 16.sp,
-                            color = Color.Black
-                        )
-                    }
-                }
-
             }
         }
     }
