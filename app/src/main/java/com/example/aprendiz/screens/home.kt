@@ -185,6 +185,7 @@ fun HomeScreen(navController: NavHostController) {
                 )
             }
             // Botones centrados
+            // Textos centrados
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -195,29 +196,28 @@ fun HomeScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center // Centra horizontalmente dentro de la fila
                 ) {
-                    Button(
-                        onClick = { navController.navigate("home") },
+                    Text(
+                        text = "Inicio",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable { navController.navigate("home") }
+                            .padding(8.dp)
+                    )
 
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFF61C449),
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Text(text = "Inicio")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = { navController.navigate("calendario") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
+                    Spacer(modifier = Modifier.width(16.dp))
 
-                    ) {
-                        Text(text = "Calendario")
-                    }
+                    Text(
+                        text = "Calendario",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("calendario") }
+                            .padding(8.dp)
+                    )
                 }
-            }
-        }
+            }}
         InstructorContainer()
         //bitacora
         Surface(

@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,7 +55,7 @@ fun RegistroVisitaScreen(navController: NavHostController) {
             .padding(top = 30.dp)
     ) {
         // Primer LinearLayout en horizontal
-        Row  (
+        Row(
             modifier = Modifier.padding(0.dp),
             verticalAlignment = Alignment.Top
         ) {
@@ -89,13 +90,12 @@ fun RegistroVisitaScreen(navController: NavHostController) {
                     modifier = Modifier.offset(x = (-30).dp)
                 )
             }
-
-            Spacer(modifier = Modifier.weight(1f))
             // Texto "Dayana" con el menú desplegable
-            Box( modifier = Modifier
-                .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
 
-                .wrapContentSize(Alignment.TopEnd),
+                    .wrapContentSize(Alignment.TopEnd),
                 contentAlignment = Alignment.CenterStart
 
             ) {
@@ -105,9 +105,8 @@ fun RegistroVisitaScreen(navController: NavHostController) {
                     modifier = Modifier
                         .background(Color(0xFFFFFFFF))
                         .shadow(4.dp, RoundedCornerShape(20.dp))
-                        .padding(10 .dp)
+                        .padding(10.dp)
                         .clickable { expanded = true },
-
 
 
                     // Hacemos que el texto sea clickable para mostrar el menú
@@ -163,7 +162,6 @@ fun RegistroVisitaScreen(navController: NavHostController) {
             }
 
         }
-        }
         // Segundo LinearLayout que aparecerá debajo del primero
         androidx.compose.material3.Surface(
             modifier = Modifier
@@ -195,6 +193,7 @@ fun RegistroVisitaScreen(navController: NavHostController) {
                 )
             }
             // Botones centrados
+            // Textos centrados
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -205,91 +204,100 @@ fun RegistroVisitaScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center // Centra horizontalmente dentro de la fila
                 ) {
-                    Button(
-                        onClick = { navController.navigate("home") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
+                    Text(
+                        text = "Inicio",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("home") }
+                            .padding(8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Text(
+                        text = "Calendario",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("calendario") }
+                            .padding(8.dp)
+                    )
+
+                }
+            }
+                }
+                // Contenedor principal con fondo blanco y bordes redondeados
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                        .border(1.dp, Color(0x88000000), RoundedCornerShape(20.dp))
+                        .background(Color(0xFFFFFEFE))
+                        .shadow(4.dp, RoundedCornerShape(20.dp)),
+                    shape = RoundedCornerShape(20.dp),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start
                     ) {
-                        Text(text = "Inicio")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = { navController.navigate("calendario") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFF61C449),
-                            contentColor = Color.White
+                        // Encabezado de la visita
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp),
+                            color = Color(0xFF009e00),
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Text(
+                                text = "Visita N1",
+                                modifier = Modifier.padding(vertical = 16.dp),
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.h6,
+                                fontFamily = FontFamily.SansSerif
+                            )
+                        }
+
+                        // Detalles de la visita
+                        Text(text = "Fecha: 01/04/2024", fontSize = 14.sp)
+                        Text(text = "Hora: 08:30am", fontSize = 14.sp)
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Línea divisora
+                        Divider(
+                            color = Color(0xFF7a7a7a),
+                            thickness = 1.dp,
+                            modifier = Modifier.fillMaxWidth(0.72f)
                         )
-                    ) {
-                        Text(text = "Calendario")
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Opciones de checkbox
+                        CheckboxOption(label = "Realizado")
+                        CheckboxOption(label = "No Realizado")
                     }
                 }
             }
         }
-    // Contenedor principal con fondo blanco y bordes redondeados
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp)
-            .border(1.dp, Color(0x88000000), RoundedCornerShape(20.dp))
-            .background(Color(0xFFFFFEFE))
-            .shadow(4.dp, RoundedCornerShape(20.dp)),
-        shape = RoundedCornerShape(20.dp),
-    ) {
-        Column(
+
+
+
+    @Composable
+    fun CheckboxOption(label: String) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
+                .padding(start = 20.dp, bottom = 8.dp)
         ) {
-            // Encabezado de la visita
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                color = Color(0xFF009e00),
-                shape = RoundedCornerShape(20.dp)
-            ) {
-                Text(
-                    text = "Visita N1",
-                    modifier = Modifier.padding(vertical = 16.dp),
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h6,
-                    fontFamily = FontFamily.SansSerif
-                )
-            }
-
-            // Detalles de la visita
-            Text(text = "Fecha: 01/04/2024", fontSize = 14.sp)
-            Text(text = "Hora: 08:30am", fontSize = 14.sp)
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Línea divisora
-            Divider(color = Color(0xFF7a7a7a), thickness = 1.dp, modifier = Modifier.fillMaxWidth(0.72f))
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Opciones de checkbox
-            CheckboxOption(label = "Realizado")
-            CheckboxOption(label = "No Realizado")
+            Checkbox(
+                checked = false,
+                onCheckedChange = {},
+                modifier = Modifier.padding(end = 10.dp)
+            )
+            Text(text = label, fontSize = 14.sp)
         }
     }
-}
-
-@Composable
-fun CheckboxOption(label: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(start = 20.dp, bottom = 8.dp)
-    ) {
-        Checkbox(
-            checked = false,
-            onCheckedChange = {},
-            modifier = Modifier.padding(end = 10.dp)
-        )
-        Text(text = label, fontSize = 14.sp)
-    }
-}

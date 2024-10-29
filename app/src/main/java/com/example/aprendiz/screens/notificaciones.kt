@@ -2,6 +2,7 @@ package com.example.aprendiz.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,14 +18,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
-import androidx.compose.material3.Card
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,11 +40,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.aprendiz.R
 
@@ -52,7 +56,7 @@ fun NotificacionScreen (navController: NavHostController) {
             .padding(top = 30.dp)
     ) {
         // Primer LinearLayout en horizontal
-        Row  (
+        Row(
             modifier = Modifier.padding(0.dp),
             verticalAlignment = Alignment.Top
         ) {
@@ -89,10 +93,11 @@ fun NotificacionScreen (navController: NavHostController) {
             }
 
             // Texto "Dayana" con el menú desplegable
-            Box( modifier = Modifier
-                .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
 
-                .wrapContentSize(Alignment.TopEnd),
+                    .wrapContentSize(Alignment.TopEnd),
                 contentAlignment = Alignment.CenterStart
 
             ) {
@@ -102,9 +107,8 @@ fun NotificacionScreen (navController: NavHostController) {
                     modifier = Modifier
                         .background(Color(0xFFFFFFFF))
                         .shadow(4.dp, RoundedCornerShape(20.dp))
-                        .padding(10 .dp)
+                        .padding(10.dp)
                         .clickable { expanded = true },
-
 
 
                     // Hacemos que el texto sea clickable para mostrar el menú
@@ -191,6 +195,7 @@ fun NotificacionScreen (navController: NavHostController) {
                 )
             }
             // Botones centrados
+            // Textos centrados
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -201,81 +206,140 @@ fun NotificacionScreen (navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center // Centra horizontalmente dentro de la fila
                 ) {
-                    Button(
-                        onClick = { navController.navigate("home") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Text(text = "Inicio")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = { navController.navigate("calendario") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Text(text = "Calendario")
-                    }
+                    Text(
+                        text = "Inicio",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("home") }
+                            .padding(8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Text(
+                        text = "Calendario",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("calendario") }
+                            .padding(8.dp)
+                    )
+
                 }
             }
         }
-            // NOTIFICACIONES
-            // Lista de notificaciones de ejemplo
-            val notificaciones = listOf(
-                "Notificación 1",
-                "Notificación 2",
-                "Notificación 3",
-                "Notificación 4"
-            )
+        // NOTIFICACIONES
+        val notificaciones = listOf(
+            Triple("Notificación 1", "Asunto 1", "Fecha 1"),
+            Triple("Notificación 2", "Asunto 2", "Fecha 2"),
+            // Agrega más notificaciones aquí
+        )
 
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Text(
-                        text = "Notificaciones",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                    )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SearchBar()
+            EmailList(notificaciones, navController)
+        }
+    }
+}
 
-                    // Listado de notificaciones
-                    LazyColumn {
-                        items(notificaciones.size) { index ->
-                            NotificacionItem(
-                                title = notificaciones[index],
-                                onClick = {
-                                    navController.navigate("detalleNotificacion/${index}")
-                                }
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
-                    }
-                }
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun SearchBar() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = { /* Acción del desplegable */ }) {
+                Image(
+                    painter = painterResource(id = R.drawable.menu1),
+                    contentDescription = "User Icon",
+                    modifier = Modifier.size(45.dp)
+                )
             }
 
+            TextField(
+                value = "",
+                onValueChange = {},
+                placeholder = { Text("Buscar...") },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 6.dp, end = 6.dp)
+                    .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(2.dp)),
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
 
+            IconButton(
+                onClick = { /* Acción al redactar */ },
+                modifier = Modifier.size(25.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.mas),
+                    contentDescription = "User Icon",
+                    modifier = Modifier.size(45.dp)
+                )
+            }
+        }
     }
-}
-@Composable
-fun NotificacionItem(title: String, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(8.dp)
-        .background(Color(0xFF009E00)),
-        shape = RoundedCornerShape(12.dp),
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(16.dp),
-            color = Color.Black
-        )
+
+    @Composable
+    fun EmailList(notificaciones: List<Triple<String, String, String>>, navController: NavController) {
+        LazyColumn {
+            itemsIndexed(notificaciones) { index, notificacion ->
+                EmailItem(
+                    title = notificacion.first,
+                    subject = notificacion.second,
+                    date = notificacion.third,
+                    onClick = {
+                        navController.navigate("detallenotificacion/$index")
+                    }
+                )
+            }
+        }
     }
-}
+
+    @Composable
+    fun EmailItem(title: String, subject: String, date: String, onClick: () -> Unit) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .border(
+                    width = 1.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(2.dp)
+                )
+                .padding(8.dp)
+                .clickable { onClick() },  // Navegar al detalle
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text(subject, color = Color.Gray, fontSize = 12.sp)
+                Text(date, color = Color.Gray, fontSize = 11.sp)
+            }
+
+            IconButton(onClick = { /* Acción para eliminar */ }) {
+                Image(
+                    painter = painterResource(id = R.drawable.papelera),
+                    contentDescription = "Eliminar",
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    }

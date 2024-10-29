@@ -59,7 +59,7 @@ fun DetalleNotificacionScreen(navController: NavHostController, navBackStackEntr
             .padding(top = 30.dp)
     ) {
         // Primer LinearLayout en horizontal
-        Row  (
+        Row(
             modifier = Modifier.padding(0.dp),
             verticalAlignment = Alignment.Top
         ) {
@@ -97,10 +97,11 @@ fun DetalleNotificacionScreen(navController: NavHostController, navBackStackEntr
 
             Spacer(modifier = Modifier.weight(1f))
             // Texto "Dayana" con el menú desplegable
-            Box( modifier = Modifier
-                .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
 
-                .wrapContentSize(Alignment.TopEnd),
+                    .wrapContentSize(Alignment.TopEnd),
                 contentAlignment = Alignment.CenterStart
 
             ) {
@@ -166,7 +167,7 @@ fun DetalleNotificacionScreen(navController: NavHostController, navBackStackEntr
 
             }
 
-        }
+
         }
 
         // Segundo LinearLayout que aparecerá debajo del primero
@@ -200,6 +201,7 @@ fun DetalleNotificacionScreen(navController: NavHostController, navBackStackEntr
                 )
             }
             // Botones centrados
+            // Textos centrados
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -210,23 +212,26 @@ fun DetalleNotificacionScreen(navController: NavHostController, navBackStackEntr
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center // Centra horizontalmente dentro de la fila
                 ) {
-                    Button(
-                        onClick = { navController.navigate("home") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        androidx.compose.material.Text(text = "Inicio")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = { navController.navigate("calendario") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        androidx.compose.material.Text(text = "Calendario")
-                    }
+                    androidx.compose.material.Text(
+                        text = "Inicio",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("home") }
+                            .padding(8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    androidx.compose.material.Text(
+                        text = "Calendario",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("calendario") }
+                            .padding(8.dp)
+                    )
+
                 }
             }
         }
@@ -238,14 +243,16 @@ fun DetalleNotificacionScreen(navController: NavHostController, navBackStackEntr
             // Contenedor superior con información de la notificación
             TrainerContainer(navController)
 
-            Spacer(modifier = Modifier.height(16.dp)
-                .shadow(4.dp, shape = RoundedCornerShape(12.dp))
-                .background(Color(0xFFF7F7F7)),
+            Spacer(
+                modifier = Modifier.height(16.dp)
+                    .shadow(4.dp, shape = RoundedCornerShape(12.dp))
+                    .background(Color(0xFFF7F7F7)),
             )
             // Contenedor inferior con detalles y botones
-            VisitContainer( )
+            VisitContainer()
         }
     }
+}
 
 @Composable
 fun TrainerContainer(navController: NavHostController) {
@@ -340,7 +347,8 @@ fun VisitContainer() {
             Button(
                 onClick = { /* Acción de rechazar */ },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD9D9D9)),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+
             ) {
                 Text("Rechazar", color = Color.Black)
             }
@@ -348,7 +356,8 @@ fun VisitContainer() {
             Button(
                 onClick = { /* Acción de aceptar */ },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF009E00)),
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                
             ) {
                 Text("Aceptar", color = Color.White)
             }

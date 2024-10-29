@@ -196,6 +196,7 @@ fun ConfiguracionScreen(navController: NavHostController) {
                 )
             }
             // Botones centrados
+            // Textos centrados
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -206,23 +207,26 @@ fun ConfiguracionScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center // Centra horizontalmente dentro de la fila
                 ) {
-                    Button(
-                        onClick = { navController.navigate("home") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Text(text = "Inicio")
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Button(
-                        onClick = { navController.navigate("calendario") },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color.Transparent
-                        )
-                    ) {
-                        Text(text = "Calendario")
-                    }
+                    Text(
+                        text = "Inicio",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("home") }
+                            .padding(8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Text(
+                        text = "Calendario",
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .clickable { navController.navigate("calendario") }
+                            .padding(8.dp)
+                    )
+
                 }
             }
         }
@@ -236,20 +240,7 @@ fun ConfiguracionScreen(navController: NavHostController) {
                 .background(Color.White)
         ) {
             // Flecha para volver a la pantalla anterior
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Volver",
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
+
 
             // Título "Configuración"
             Text(
