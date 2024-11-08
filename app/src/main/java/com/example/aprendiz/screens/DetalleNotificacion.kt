@@ -269,13 +269,7 @@ fun TrainerContainer(navController: NavHostController) {
         horizontalArrangement = Arrangement.SpaceBetween,
 
     ) {
-        IconButton(onClick = { navController.popBackStack() }) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Volver",
-                modifier = Modifier.size(24.dp)
-            )
-        }
+
         Text(
             text = "Instructor",
             style = TextStyle(

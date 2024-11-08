@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -312,6 +313,7 @@ fun NotificacionScreen (navController: NavHostController) {
 
     @Composable
     fun EmailItem(title: String, subject: String, date: String, onClick: () -> Unit) {
+        var snackbarVisible by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -334,12 +336,31 @@ fun NotificacionScreen (navController: NavHostController) {
                 Text(date, color = Color.Gray, fontSize = 11.sp)
             }
 
-            IconButton(onClick = { /* Acción para eliminar */ }) {
+            IconButton(onClick = { snackbarVisible = true }) { // Al hacer clic, muestra el Snackbar
                 Image(
                     painter = painterResource(id = R.drawable.papelera),
                     contentDescription = "Eliminar",
                     modifier = Modifier.size(24.dp)
+
                 )
+            }
+        }
+
+        // Mostrar el Snackbar cuando snackbarVisible es true
+        if (snackbarVisible) {
+            Snackbar(
+                backgroundColor = Color.White,
+                action = {
+                    Button(
+                        onClick = { snackbarVisible = false }, // Oculta el Snackbar al presionar "Cerrar"
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray)
+                    ) {
+                        Text("Cerrar", color = Color.Black)
+                    }
+                },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Mensaje eliminado", color = Color.Black)
             }
         }
     }
