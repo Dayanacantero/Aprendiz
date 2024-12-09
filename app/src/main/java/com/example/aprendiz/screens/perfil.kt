@@ -4,36 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -50,11 +27,15 @@ import com.example.aprendiz.R
 @Composable
 fun PerfilScreen(navController: NavHostController) {
     var expanded by remember { mutableStateOf(false) }
+    var isEditing by remember { mutableStateOf(false) }
+
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(top = 30.dp)
+            .verticalScroll(rememberScrollState()) // Habilita el desplazamiento vertical
     ) {
-        // Primer LinearLayout en horizontal
+        // Header con imágenes y menú desplegable
         Row(
             modifier = Modifier.padding(0.dp),
             verticalAlignment = Alignment.Top
@@ -92,153 +73,113 @@ fun PerfilScreen(navController: NavHostController) {
             }
 
             Spacer(modifier = Modifier.weight(1f))
-            var expanded by remember { mutableStateOf(false) }
 
-            // Texto "Dayana" con el menú desplegable
-            Box( modifier = Modifier
-                .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
-
-                .wrapContentSize(Alignment.TopEnd),
-                contentAlignment = Alignment.CenterStart
-
+            Box(
+                modifier = Modifier
+                    .wrapContentSize(Alignment.TopEnd)
             ) {
-
                 Text(
                     text = "Dayana",
                     modifier = Modifier
-                        .background(Color(0xFFFFFFFF))
+                        .background(Color.White)
                         .shadow(4.dp, RoundedCornerShape(20.dp))
-                        .padding(10 .dp)
-                        .clickable { expanded = true },
-
-
-
-                    // Hacemos que el texto sea clickable para mostrar el menú
+                        .padding(10.dp)
+                        .clickable { expanded = true }
                 )
 
-// Menú desplegable
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
-
-
-                    ) {
-                    // Información del usuario
-                    Row(modifier = Modifier.padding(bottom = 12.dp)) {
-                        Column {
-                            Text(
-                                text = "Dayana Cantero",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
-                            )
-                            Text(
-                                text = "Aprendiz",
-                                fontSize = 14.sp,
-                                color = Color.Gray,
-                                modifier = Modifier.padding(top = 4.dp)
-                            )
-                        }
-                    }
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    onDismissRequest = { expanded = false }
+                ) {
+                    DropdownMenuItem(onClick = {
                         expanded = false
-                        navController.navigate("perfil") // Navegar a la pantalla de perfil
-
+                        navController.navigate("perfil")
                     }) {
                         Text("Ver perfil")
                     }
 
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         expanded = false
-                        // Navegar a la pantalla de configuración u otro lugar
                         navController.navigate("configuracion")
                     }) {
                         Text("Configuración")
                     }
 
-                    androidx.compose.material.DropdownMenuItem(onClick = {
+                    DropdownMenuItem(onClick = {
                         expanded = false
-                        // Implementar la acción de cerrar sesión
                     }) {
                         Text("Cerrar sesión")
                     }
                 }
-
             }
-
         }
 
-        // Segundo LinearLayout que aparecerá debajo del primero
-        androidx.compose.material3.Surface(
+        // Barra inferior con opciones
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp)
-                .background(Color(0xFF009E00)),
-            color = Color.Transparent
+                .height(70.dp),
+            color = Color(0xFF009E00)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom, // Mueve el contenido al final
-                horizontalAlignment = Alignment.End // Alinea el contenido a la derecha
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                // Contenedor para el ImageButton y TextView
+                Text(
+                    text = "Inicio",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    modifier = Modifier.clickable { navController.navigate("home") }
+                )
+
+                Text(
+                    text = "Calendario",
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    modifier = Modifier.clickable { navController.navigate("calendario") }
+                )
 
                 Image(
                     painter = painterResource(id = R.drawable.notificaciones),
-                    contentDescription = "",
+                    contentDescription = "Notificaciones",
                     modifier = Modifier
                         .size(50.dp)
-
-                        .clickable {
-                            navController.navigate("notificaciones") // Navega a la pantalla de notificaciones
-                        },
+                        .clickable { navController.navigate("notificaciones") },
                     colorFilter = ColorFilter.tint(Color.White)
-
-
                 )
             }
-            // Botones centrados
-            // Textos centrados
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center, // Centra verticalmente
-                horizontalAlignment = Alignment.CenterHorizontally // Centra horizontalmente
+        }
+
+        // Información del perfil
+        PerfilInfo(isEditing = isEditing)
+
+        // Botón de actualizar
+        Spacer(modifier = Modifier.height(8.dp)) // Reducido el espacio antes del botón
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                onClick = { isEditing = !isEditing },
+                modifier = Modifier.padding(8.dp), // Reducido el padding
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF009E00))
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center // Centra horizontalmente dentro de la fila
-                ) {
-                    Text(
-                        text = "Inicio",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .clickable { navController.navigate("home") }
-                            .padding(8.dp)
-                    )
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Text(
-                        text = "Calendario",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        modifier = Modifier
-                            .clickable { navController.navigate("calendario") }
-                            .padding(8.dp)
-                    )
-
-
-                }
+                Text(text = if (isEditing) "Guardar" else "Actualizar", color = Color.White)
             }
         }
-        PerfilInfo()
     }
-
 }
+
 @Composable
-fun PerfilInfo() {
+fun PerfilInfo(isEditing: Boolean) {
+    var nombres by remember { mutableStateOf("Dayana") }
+    var apellidos by remember { mutableStateOf("Cantero") }
+    var correo by remember { mutableStateOf("dayana@gmail.com") }
+    var cuenta by remember { mutableStateOf("Activa") }
+    var departamento by remember { mutableStateOf("Cauca") }
+    var municipio by remember { mutableStateOf("Popayan") }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -246,12 +187,11 @@ fun PerfilInfo() {
             .background(Color(0xFFE0E0E0), shape = MaterialTheme.shapes.medium)
             .border(
                 3.dp,
-                Brush.verticalGradient(listOf(Color.Gray.copy(alpha = 20f), Color.Transparent)),
+                Brush.verticalGradient(listOf(Color.Gray.copy(alpha = 0.2f), Color.Transparent)),
                 shape = MaterialTheme.shapes.medium
             )
             .padding(16.dp)
     ) {
-
         Spacer(modifier = Modifier.height(10.dp))
 
         Text(
@@ -262,36 +202,41 @@ fun PerfilInfo() {
         )
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Basic Information Section
         Text(text = "Datos básicos", fontWeight = FontWeight.Bold, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(10.dp))
-        InfoItem(label = "Nombres:", value = "Nombre del Usuario")
-        InfoItem(label = "Apellidos:", value = "Apellido del Usuario")
-        InfoItem(label = "Correo electrónico:", value = "usuario@ejemplo.com")
-        InfoItem(label = "Cuenta Soy SENA:", value = "Activa")
-        InfoItem(label = "Departamento:", value = "Departamento de Ejemplo")
-        InfoItem(label = "Municipio:", value = "Municipio de Ejemplo")
-
-        Text(text = "Modalidad que maneja", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-        Spacer(modifier = Modifier.height(10.dp))
-        InfoItem(label = "Modalidad:", value = "Ejemplo")
-        InfoItem(label = "Modalidad:", value = "Ejemplo")
+        InfoItem(label = "Nombres:", value = nombres, isEditing = isEditing, onValueChange = { nombres = it })
+        InfoItem(label = "Apellidos:", value = apellidos, isEditing = isEditing, onValueChange = { apellidos = it })
+        InfoItem(label = "Correo electrónico:", value = correo, isEditing = isEditing, onValueChange = { correo = it })
+        InfoItem(label = "Cuenta Soy SENA:", value = cuenta, isEditing = isEditing, onValueChange = { cuenta = it })
+        InfoItem(label = "Departamento:", value = departamento, isEditing = isEditing, onValueChange = { departamento = it })
+        InfoItem(label = "Municipio:", value = municipio, isEditing = isEditing, onValueChange = { municipio = it })
     }
 }
 
-
 @Composable
-    fun InfoItem(label: String, value: String) {
-        Column(modifier = Modifier.padding(vertical = 4.dp)) {
-            Text(text = label, fontWeight = FontWeight.Bold)
+fun InfoItem(label: String, value: String, isEditing: Boolean, onValueChange: (String) -> Unit) {
+    Column(modifier = Modifier.padding(vertical = 4.dp)) {
+        Text(text = label, fontWeight = FontWeight.Bold)
+        if (isEditing) {
+            TextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
+                    .padding(8.dp)
+            )
+        } else {
             Text(
                 text = value,
                 fontSize = 16.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, shape = RoundedCornerShape(8.dp))  // Fondo blanco redondeado
-                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))  // Borde gris redondeado
+                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     .padding(8.dp)
             )
         }
     }
+}

@@ -346,13 +346,12 @@ fun NotificacionScreen (navController: NavHostController) {
             }
         }
 
-        // Mostrar el Snackbar cuando snackbarVisible es true
         if (snackbarVisible) {
             Snackbar(
                 backgroundColor = Color.White,
                 action = {
                     Button(
-                        onClick = { snackbarVisible = false }, // Oculta el Snackbar al presionar "Cerrar"
+                        onClick = { snackbarVisible = false },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray)
                     ) {
                         Text("Cerrar", color = Color.Black)

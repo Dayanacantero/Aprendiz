@@ -1,52 +1,45 @@
 package com.example.aprendiz.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.SnackbarDefaults.backgroundColor
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Card
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import com.example.aprendiz.R
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.aprendiz.R
+
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
     var expanded by remember { mutableStateOf(false) }
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(top = 30.dp)
+            .verticalScroll(rememberScrollState()) // Habilita el desplazamiento
     ) {
         // Primer LinearLayout en horizontal
-        Row  (
+        Row(
             modifier = Modifier.padding(0.dp),
             verticalAlignment = Alignment.Top
         ) {
@@ -83,76 +76,62 @@ fun HomeScreen(navController: NavHostController) {
             }
 
             // Texto "Dayana" con el menú desplegable
-            Box( modifier = Modifier
+            Box(modifier = Modifier
                 .fillMaxWidth()  // Ocupa todo el ancho de la pantalla
-
                 .wrapContentSize(Alignment.TopEnd),
-                contentAlignment = Alignment.CenterStart
-
             ) {
+                Text(
+                    text = "Dayana",
+                    modifier = Modifier
+                        .background(Color(0xFFFFFFFF))
+                        .padding(10.dp)
+                        .clickable { expanded = true },
+                )
 
-            Text(
-                text = "Dayana",
-                modifier = Modifier
-                    .background(Color(0xFFFFFFFF))
-                    .shadow(4.dp, RoundedCornerShape(20.dp))
-                    .padding(10 .dp)
-                    .clickable { expanded = true },
+                // Menú desplegable
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    // Información del usuario
+                    Row(modifier = Modifier.padding(bottom = 12.dp)) {
+                        Column {
+                            Text(
+                                text = "Dayana Cantero",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                            Text(
+                                text = "Aprendiz",
+                                fontSize = 14.sp,
+                                color = Color.Gray,
+                                modifier = Modifier.padding(top = 4.dp)
+                            )
+                        }
+                    }
+                    DropdownMenuItem(onClick = {
+                        expanded = false
+                        navController.navigate("perfil") // Navegar a la pantalla de perfil
+                    }) {
+                        Text("Ver perfil")
+                    }
 
+                    DropdownMenuItem(onClick = {
+                        expanded = false
+                        // Navegar a la pantalla de configuración u otro lugar
+                        navController.navigate("configuracion")
+                    }) {
+                        Text("Configuración")
+                    }
 
-
-            // Hacemos que el texto sea clickable para mostrar el menú
-            )
-
-// Menú desplegable
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-
-
-            ) {
-                // Información del usuario
-                Row(modifier = Modifier.padding(bottom = 12.dp)) {
-                    Column {
-                        Text(
-                            text = "Dayana Cantero",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp
-                        )
-                        Text(
-                            text = "Aprendiz",
-                            fontSize = 14.sp,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
+                    DropdownMenuItem(onClick = {
+                        expanded = false
+                        // Implementar la acción de cerrar sesión
+                    }) {
+                        Text("Cerrar sesión")
                     }
                 }
-                DropdownMenuItem(onClick = {
-                    expanded = false
-                    navController.navigate("perfil") // Navegar a la pantalla de perfil
-
-                }) {
-                    Text("Ver perfil")
-                }
-
-                DropdownMenuItem(onClick = {
-                    expanded = false
-                    // Navegar a la pantalla de configuración u otro lugar
-                    navController.navigate("configuracion")
-                }) {
-                    Text("Configuración")
-                }
-
-                DropdownMenuItem(onClick = {
-                    expanded = false
-                    // Implementar la acción de cerrar sesión
-                }) {
-                    Text("Cerrar sesión")
-                }
             }
-
-        }
-
         }
         // Segundo LinearLayout que aparecerá debajo del primero
         Surface(
@@ -175,13 +154,10 @@ fun HomeScreen(navController: NavHostController) {
                     contentDescription = "",
                     modifier = Modifier
                         .size(50.dp)
-
                         .clickable {
                             navController.navigate("notificaciones") // Navega a la pantalla de notificaciones
                         },
                     colorFilter = ColorFilter.tint(Color.White)
-
-
                 )
             }
             // Botones centrados
@@ -217,21 +193,18 @@ fun HomeScreen(navController: NavHostController) {
                             .padding(8.dp)
                     )
                 }
-            }}
+            }
+        }
         InstructorContainer()
-        //bitacora
+
+        // Bitácora
         Surface(
             modifier = Modifier
                 .width(200.dp)
                 .height(200.dp)
                 .padding(vertical = 8.dp)
                 .background(Color(0xFFF7F7F7)),
-            shape = RoundedCornerShape(12.dp),
-
-            // Color de fondo similar a bg-gray-100
-            shadowElevation = 4.dp
-
-
+            shape = RoundedCornerShape(12.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp), // Padding interno
@@ -244,23 +217,78 @@ fun HomeScreen(navController: NavHostController) {
                     modifier = Modifier.padding(bottom = 8.dp) // Margen inferior
                 )
 
-                // Contenedor para el gráfico (simulación)
-                Box(
-                    modifier = Modifier
-                        .size(240.dp) // Tamaño del gráfico
-                        .background(Color.White), // Color de fondo del contenedor
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.bitacora),
-                        contentDescription = null,
-                        modifier = Modifier.size(90.dp)
-                    )
-                }
+                // Contenedor para el gráfico circular
+                BitacoraCircularGraph()
             }
-
         }
         TimelineContainer()
+    }
+}
+
+
+// Gráfico Circular que cambia de color y se llena al hacer clic
+@Composable
+fun BitacoraCircularGraph() {
+    var progress by remember { mutableStateOf(0f) }  // Control de progreso
+    var colorIndex by remember { mutableStateOf(0) }  // Índice para los colores (0 = Rojo, 1 = Amarillo, 2 = Verde)
+    var clickCount by remember { mutableStateOf(0) }  // Contador de clics
+
+    // Colores que se alternarán
+    val colors = listOf(Color.Red, Color.Yellow, Color.Green)
+
+    // Contenedor donde se muestra el gráfico
+    Surface(
+        modifier = Modifier
+            .size(200.dp) // Aseguramos que el tamaño sea cuadrado para evitar el óvalo
+            .padding(vertical = 8.dp)
+            .background(Color(0xFFF7F7F7)),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.clickable {
+                // Limitar los clics a 3
+                if (clickCount < 3) {
+                    // Incrementar el progreso y cambiar el color
+                    progress = if (progress < 1f) progress + 0.33f else 0f  // Reinicia el progreso después de 3 clics
+
+                    // Cambiar el color ciclando entre los 3 colores
+                    colorIndex = (colorIndex + 1) % colors.size
+                    clickCount += 1  // Aumentar el contador de clics
+                }
+            }
+        ) {
+            // Dibujar el gráfico circular
+            CircularProgressBar(progress = progress, color = colors[colorIndex])
+        }
+    }
+}
+
+@Composable
+fun CircularProgressBar(progress: Float, color: Color) {
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        val radius = size.minDimension / 0  // Radio del círculo
+
+        // Fondo gris claro del círculo (el círculo no está completamente relleno, solo se dibuja el contorno)
+        drawCircle(
+            color = Color.LightGray,
+            radius = radius,
+            style = Stroke(width = 30f)
+        )
+
+        // Círculo de progreso (borde alrededor del círculo)
+        drawArc(
+            color = color,
+            startAngle = -90f,
+            sweepAngle = 360 * progress,
+            useCenter = false,
+            style = Stroke(width = 30f),
+            size = size.copy(
+                width = size.width * 0.8f,
+                height = size.height * 0.8f
+            ),
+            topLeft = center.copy(x = size.width * 0.1f, y = size.height * 0.1f)
+        )
     }
 }
 
@@ -268,24 +296,19 @@ fun HomeScreen(navController: NavHostController) {
 
 
 
-
-// Función para el contenedor del instructor
 @Composable
 fun InstructorContainer() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
-
     ) {
         // Card para el instructor asignado
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
-                .background(Color(0xFFF7F7F7))// Similar a bg-gray-100
-                .shadow(4.dp) // Sin paréntesis
-
+                .background(Color(0xFFF7F7F7))
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
@@ -321,6 +344,7 @@ fun DetailItem(label: String, value: String) {
         )
     }
 }
+
 @Composable
 fun TimelineContainer() {
     Surface(
@@ -328,8 +352,7 @@ fun TimelineContainer() {
             .width(300.dp)
             .padding(vertical = 8.dp)
             .background(Color(0xFFF7F7F7)),
-        shape = RoundedCornerShape(12.dp),
-        shadowElevation = 4.dp
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
             modifier = Modifier
@@ -386,16 +409,16 @@ fun TimelineEvent(eventText: String, isCompleted: Boolean) {
         modifier = Modifier.padding(vertical = 16.dp)
     ) {
         // Dibuja el círculo del evento
-        Canvas(modifier = Modifier.size(16.dp)) {
-            drawCircle(
-                color = if (isCompleted) Color.Green else Color.Gray,
-                radius = size.minDimension / 2
-            )
+        Canvas(modifier = Modifier.size(20.dp)) {
+            drawCircle(color = if (isCompleted) Color.Green else Color.Gray)
         }
 
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(16.dp))
 
-        // Texto del evento
-        Text(text = eventText, fontSize = 14.sp)
+        Text(
+            text = eventText,
+            fontSize = 14.sp,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
