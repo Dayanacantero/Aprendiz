@@ -110,7 +110,7 @@ fun LoginScreen(navController: NavHostController) {
                     // Segundo conjunto de credenciales
                 } else if (username == "Laura@gmail.com" && password == "87654321") {
                     isLoggedIn = true
-                    navController.navigate("data_entry_screen") // Redirige a otra pantalla para este usuario
+                    navController.navigate("Lista_Aprendiz") // Redirige a otra pantalla para este usuario
 
                     // Si las credenciales son incorrectas
                 } else {
